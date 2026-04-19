@@ -609,7 +609,7 @@ function createStateUpdate<T extends IFilterListItem, GroupIdentifier>(
       ? match(filter, group.items, getText)
       : group.items.map(item => ({
           score: 1,
-          matches: { title: [], subtitle: [] },
+          matches: { title: [], subtitle: [], path: [] },
           item,
         }))
 

@@ -97,7 +97,12 @@ export class RepositoryListItem extends React.Component<
           <strong>{realName}</strong>
           {alias && <> ({alias})</>}
         </div>
-        <div>{repo.path}</div>
+        <div>
+          <HighlightText
+            text={repo.path}
+            highlight={this.props.matches.path}
+          />
+        </div>
       </>
     )
   }
