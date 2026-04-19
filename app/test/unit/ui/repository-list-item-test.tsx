@@ -14,7 +14,7 @@ import {
   resetTestTimers,
 } from '../../helpers/ui/timers'
 
-const noMatches: IMatches = { title: [], subtitle: [] }
+const noMatches: IMatches = { title: [], subtitle: [], path: [] }
 const fixtureRepositoryPath = '/tmp/desktop-fixture'
 
 function createRepository(alias: string | null = null) {

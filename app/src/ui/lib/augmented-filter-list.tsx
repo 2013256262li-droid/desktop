@@ -846,7 +846,7 @@ function createStateUpdate<T extends IFilterListItem>(
       ? match(filter, itemsToMatch, getText)
       : itemsToMatch.map(item => ({
           score: 1,
-          matches: { title: [], subtitle: [] },
+          matches: { title: [], subtitle: [], path: [] },
           item,
         }))
 

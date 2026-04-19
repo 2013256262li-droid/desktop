@@ -9,6 +9,7 @@ function score(str: string, query: string, maxScore: number) {
 export interface IMatches {
   readonly title: ReadonlyArray<number>
   readonly subtitle: ReadonlyArray<number>
+  readonly path: ReadonlyArray<number>
 }
 
 export interface IMatch<T> {
@@ -25,7 +26,6 @@ export function match<T>(
   items: ReadonlyArray<T>,
   getKey: KeyFunction<T>
 ): ReadonlyArray<IMatch<T>> {
-  // matching `query` against itself is a perfect match.
   const maxScore = score(query, query, 1)
   const result = items
     .map((item): IMatch<T> => {
@@ -39,13 +39,17 @@ export function match<T>(
         score: score(itemTextArray.join(''), query, maxScore),
         item,
         matches: {
-          title: matches[0],
+          title: matches[0] ?? [],
           subtitle: matches.length > 1 ? matches[1] : [],
+          path: matches.length > 2 ? matches[2] : [],
         },
       }
     })
     .filter(
-      ({ matches }) => matches.title.length > 0 || matches.subtitle.length > 0
+      ({ matches }) =>
+        matches.title.length > 0 ||
+        matches.subtitle.length > 0 ||
+        matches.path.length > 0
     )
     .sort(({ score: left }, { score: right }) => compareDescending(left, right))
 

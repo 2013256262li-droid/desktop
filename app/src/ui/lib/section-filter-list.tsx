@@ -707,7 +707,7 @@ function createStateUpdate<T extends IFilterListItem, GroupIdentifier>(
       ? match(filter, group.items, getText)
       : group.items.map(item => ({
           score: 1,
-          matches: { title: [], subtitle: [] },
+          matches: { title: [], subtitle: [], path: [] },
           item,
         }))
 
@@ -736,11 +736,7 @@ function createStateUpdate<T extends IFilterListItem, GroupIdentifier>(
     section++
   }
 
-  if (selectedRow.row < 0 && filter.length) {
-    // If the selected item isn't in the list (e.g., filtered out), then
-    // select the first visible item.
-    selectedRow = getFirstVisibleRow(rows)
-  }
+
 
   // Stay true if already set, otherwise become true if the filter has content
   const filterValueChanged = state?.filterValueChanged
