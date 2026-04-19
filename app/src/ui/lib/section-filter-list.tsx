@@ -191,6 +191,11 @@ interface IFilterListState<T extends IFilterListItem, GroupIdentifier> {
   readonly filterValueChanged: boolean
   // Indices of groups in the filtered list
   readonly groups: ReadonlyArray<number>
+  /**
+   * The scroll position before filter was applied. This is used to restore
+   * the scroll position when the filter is cleared.
+   */
+  readonly scrollTop: number | undefined
 }
 
 /** A List which includes the ability to filter based on its contents. */
@@ -224,7 +229,10 @@ export class SectionFilterList<
     prevProps: ISectionFilterListProps<T, GroupIdentifier>,
     prevState: IFilterListState<T, GroupIdentifier>
   ) {
-    if (this.props.onSelectionChanged) {
+    const filterTextChanged =
+      (prevProps.filterText || '') !== (this.props.filterText || '')
+
+    if (this.props.onSelectionChanged && !filterTextChanged) {
       const oldSelectedItemId = getItemIdFromRowIndex(
         prevState.rows,
         prevState.selectedRow
@@ -376,6 +384,7 @@ export class SectionFilterList<
     if (this.state.rows.length === 0 && this.props.renderNoItems) {
       return this.props.renderNoItems()
     } else {
+      const isFiltered = this.state.filterValue.length > 0
       return (
         <SectionList
           ref={this.onListRef}
@@ -396,12 +405,20 @@ export class SectionFilterList<
           onRowKeyDown={this.onRowKeyDown}
           onRowContextMenu={this.onRowContextMenu}
           canSelectRow={this.canSelectRow}
+          onScroll={this.onScroll}
+          setScrollTop={isFiltered ? undefined : this.state.scrollTop}
           invalidationProps={{
             ...this.props,
             ...this.props.invalidationProps,
           }}
         />
       )
+    }
+  }
+
+  private onScroll = (scrollTop: number) => {
+    if (this.state.filterValue.length === 0) {
+      this.setState({ scrollTop })
     }
   }
 
@@ -736,9 +753,11 @@ function createStateUpdate<T extends IFilterListItem, GroupIdentifier>(
     section++
   }
 
+  let scrollTop: number | undefined = undefined
+  if (state) {
+    scrollTop = state.scrollTop
+  }
 
-
-  // Stay true if already set, otherwise become true if the filter has content
   const filterValueChanged = state?.filterValueChanged
     ? true
     : filter.length > 0
@@ -749,6 +768,7 @@ function createStateUpdate<T extends IFilterListItem, GroupIdentifier>(
     filterValue: filter,
     filterValueChanged,
     groups: groupIndices,
+    scrollTop,
   }
 }
 
