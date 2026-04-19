@@ -38,6 +38,26 @@ function createTestGroups(): ReadonlyArray<IFilterListGroup<TestItem, string>> {
   ]
 }
 
+function createLargeTestGroups(): ReadonlyArray<IFilterListGroup<TestItem, string>> {
+  return [
+    {
+      identifier: 'group1',
+      items: [
+        createTestItem('1', 'repo-1', '/home/user/repos/repo-1'),
+        createTestItem('2', 'repo-2', '/home/user/repos/repo-2'),
+        createTestItem('3', 'repo-3', '/home/user/repos/repo-3'),
+        createTestItem('4', 'repo-4', '/home/user/repos/repo-4'),
+        createTestItem('5', 'repo-5', '/home/user/repos/repo-5'),
+        createTestItem('6', 'repo-6', '/home/user/repos/repo-6'),
+        createTestItem('7', 'repo-7', '/home/user/repos/repo-7'),
+        createTestItem('8', 'repo-8', '/home/user/repos/repo-8'),
+        createTestItem('9', 'repo-9', '/home/user/repos/repo-9'),
+        createTestItem('10', 'repo-10', '/home/user/repos/repo-10'),
+      ],
+    },
+  ]
+}
+
 describe('SectionFilterList', () => {
   let selectionChanges: Array<{ item: TestItem | null; kind: string }> = []
 
