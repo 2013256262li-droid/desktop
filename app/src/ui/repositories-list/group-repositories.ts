@@ -150,7 +150,10 @@ const toSortedListItems = (
       const title = getDisplayTitle(r)
 
       return {
-        text: r instanceof Repository ? [title, nameOf(r)] : [title],
+        text:
+          r instanceof Repository
+            ? [title, nameOf(r), r.path]
+            : [title, r.name, r.path],
         id: r.id.toString(),
         repository: r,
         needsDisambiguation:
